@@ -1,0 +1,26 @@
+<?php 
+$filas = $data['filas'];
+?>
+<h2 class="sub-header">Usuarios</h2>
+<a href="/users/insert">Insertar Usuario</a>
+<br/>
+<table class="table table-striped">
+<?php foreach($filas as $key => $fila):?>
+	<tr>
+		<?php 
+		$image = $fila['photo'];
+		unset($fila['photo']);
+		foreach ($fila as $columna):?>
+			<td><?=$columna;?></td>
+		<?php endforeach; ?>
+		<td>
+			<img width="100px" src="<?='/uploads/'.$image;?>"/>
+		</td>	
+		<td>
+			<a href="/users/update/id/<?=$fila['iduser'];?>">Update</a>
+				&nbsp;
+			<a href="/users/delete/id/<?=$fila['iduser'];?>">Delete</a>
+		</td>
+	</tr>
+<?php endforeach ?>
+</table>

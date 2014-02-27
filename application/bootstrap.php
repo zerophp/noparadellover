@@ -2,15 +2,26 @@
 
 class bootstrap
 {
+	var $config;
+	
 	public function run($request, $configfile)
 	{
-		$config = parse_ini_file($configfile, TRUE);
+		$this->config = parse_ini_file($configfile, TRUE);
 		
 		$controller = 'controllers_'.$request['controller'];
-		$obj = new $controller($config,$request);		
+		$obj = new $controller($this->config,$request);		
 		$content = $obj->$request['action']();
+		$layout = $obj->getLayout();
+		$this->renderLayout($layout,$content);		
 		
-		include('../application/views/layouts/layout.phtml');
+	}
+	
+	public function renderLayout($layout, $content)
+	{
+// 		$this->config['layouts']['default'];
+		include('../application/views/layouts/'.
+				$layout.
+				'.phtml');
 	}
 
 }

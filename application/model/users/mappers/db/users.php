@@ -54,7 +54,24 @@ class model_users_mappers_db_users extends model_mappers_db
 		return $rows[0];
 	}
 	
+	public function getCredential($email, $password)
+	{
+		$password = sha1($password);
+		$sql="SELECT users.*					 
+			  FROM users
+			  WHERE users.email = '".$email."' AND
+			  		users.password = '".$password."'";
 	
+		$result=mysqli_query($this->link, $sql);
+		while ($row=mysqli_fetch_assoc($result))
+		{
+			$row['pets']=explode('|',$this->getPets($row['iduser']));
+			$row['languages']=explode('|',$this->getLanguages($row['iduser']));
+			$rows[]=$row;
+		}
+	
+		return $rows[0];
+	}
 	
 	public function getPets($iduser)
 	{

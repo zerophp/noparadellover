@@ -3,14 +3,22 @@
 class bootstrap
 {
 	var $config;
+	var $request;
 	
-	public function run($request, $configfile)
+	public function __construct($config, $request)
 	{
-		$this->config = parse_ini_file($configfile, TRUE);
+		$this->request = $request;
+		$this->config = $config;
+	}
+	
+	public function run()
+	{
+		$this->initSession();
+		$this->initAcl();
 		
-		$controller = 'controllers_'.$request['controller'];
-		$obj = new $controller($this->config,$request);		
-		$content = $obj->$request['action']();
+		$controller = 'controllers_'.$this->request['controller'];
+		$obj = new $controller($this->config,$this->request);
+		$content = $obj->{$this->request['action']}();
 		$layout = $obj->getLayout();
 		$this->renderLayout($layout,$content);		
 		
@@ -18,10 +26,34 @@ class bootstrap
 	
 	public function renderLayout($layout, $content)
 	{
-// 		$this->config['layouts']['default'];
 		include('../application/views/layouts/'.
 				$layout.
 				'.phtml');
 	}
+	
+	
+	protected function initAcl()
+	{
+		$publicControllers = array ('index', 'author');
+		if(isset($_SESSION['iduser']))
+		{		
+			$acl = new model_acl($this->config['database']);
+			$data = $acl->getAcl($_SESSION['iduser'], $this->request);
+			if(!isset($data))
+				header('Location: /author/login');
+		}
+		elseif (!in_array($this->request['controller'], $publicControllers))
+		{
+			header('Location: /author/login');
+		} 				
+	}
+	
+	public function initSession()
+	{
+		session_start();
+	}
+	
+	
+	
 
 }

@@ -1,12 +1,12 @@
 <?php
 
-class controllers_users extends controllers_general
+class controllers_users extends frontview
 {
 	public function select()
 	{
 		$obj = new model_users($this->config);
 		$filas = $obj->getUsers();
-		$content = model_general_views::renderView(array('filas'=>$filas), $this->request['action']);
+		$content = model_general_views::renderView(array('filas'=>$filas), $this->request);
 		return $content;
 	}
 	
@@ -20,7 +20,7 @@ class controllers_users extends controllers_general
 		}
 		else
 		{
-			$content = model_general_views::renderView(array(), $this->request['action']);
+			$content = model_general_views::renderView(array(), $this->request);
 			return $content;
 		}
 	}
@@ -30,15 +30,15 @@ class controllers_users extends controllers_general
 		if ($_POST)
 		{
 			$obj = new model_users($this->config);
-			$obj->updateUser('users', $_POST, $_POST['iduser'],$this->config['database']);
+			$obj->updateUser('users', $_POST, $_POST['iduser']);
 			// TODO: Implementar cambiar imagen
 			header('Location: /users');
 		}
 		else
 		{
 			$obj = new model_users($this->config);
-			$usuario=$obj->getUser($this->request['params']['id'], $this->config['database']);
-			$content = model_general_views::renderView(array('usuario'=>$usuario), 'insert');
+			$usuario=$obj->getUser($this->request['params']['id']);
+			$content = model_general_views::renderView(array('usuario'=>$usuario), array('controller'=>'users', 'action'=>'insert'));
 			return $content;
 		}
 	}
@@ -50,7 +50,7 @@ class controllers_users extends controllers_general
 			if($_POST['borrar']=="Si")
 			{
 				$obj = new model_users($this->config);
-				$obj->deleteUser($_POST['id'],$this->config['database']);
+				$obj->deleteUser($_POST['id']);
 				// TODO: delete image
 			}
 			header('Location: /users');
@@ -58,8 +58,8 @@ class controllers_users extends controllers_general
 		else
 		{
 			$obj = new model_users($this->config);
-			$usuario=$obj->getUser($this->request['params']['id'], $this->config['database']);
-			$content = model_general_views::renderView(array('usuario'=>$usuario),$this->request['action']);
+			$usuario=$obj->getUser($this->request['params']['id']);
+			$content = model_general_views::renderView(array('usuario'=>$usuario),$this->request);
 			return $content;
 		}
 	}

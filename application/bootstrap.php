@@ -14,6 +14,7 @@ class bootstrap
 	public function run()
 	{
 		$this->initSession();
+		$this->initRegister();
 		$this->initAcl();
 		
 		$controller = 'controllers_'.$this->request['controller'];
@@ -51,6 +52,49 @@ class bootstrap
 	public function initSession()
 	{
 		session_start();
+	}
+	
+	public function initRegister()
+	{
+		$_SESSION['register']='';
+	}
+	
+	public function initDbR()
+	{
+		
+		if(!isset($_SESSION['register']['link']) ||
+		$_SESSION['register']['link']=='')
+		{
+			$link=mysqli_connect($this->config['databaseR']['host'],
+					$this->config['databaseR']['user'],
+					$this->config['databaseR']['password']
+			);
+			$_SESSION['register']['linkR']=$link;
+		}
+		else
+		{
+			$_SESSION['register']['linkR']= 
+				new model_mappers_db($this->config['databaseR']);
+		}
+		
+	}
+	
+	public function initDbW()
+	{
+		if(!isset($_SESSION['register']['link']) ||
+		$_SESSION['register']['link']=='')
+		{
+			$link=mysqli_connect($this->config['databaseW']['host'],
+					$this->config['databaseW']['user'],
+					$this->config['databaseW']['password']
+			);
+			$_SESSION['register']['linkW']=$link;
+		}
+		else
+		{
+			$_SESSION['register']['linkW']= 
+				new model_mappers_db($this->config['databaseW']);
+		}
 	}
 	
 	

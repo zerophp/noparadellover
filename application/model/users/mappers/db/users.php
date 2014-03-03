@@ -22,7 +22,11 @@ class model_users_mappers_db_users extends model_mappers_db
 			  WHERE users.genders_idgender = genders.idgender AND
 					users.cities_idcity = cities.idcity";
 			
-		$result=mysqli_query($this->link, $sql);
+		echo "<pre>ses:";
+		print_r($_SESSION);
+		echo "</pre>";
+		
+		$result=mysqli_query($_SESSION['register']['linkR'], $sql);
 		while ($row=mysqli_fetch_assoc($result))
 		{
 			$row['pets']=$this->getPets($row['iduser']);

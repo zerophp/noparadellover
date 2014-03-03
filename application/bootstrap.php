@@ -15,6 +15,9 @@ class bootstrap
 	{
 		$this->initSession();
 		$this->initRegister();
+		$this->initDbR();
+		$this->initDbW();
+		
 		$this->initAcl();
 		
 		$controller = 'controllers_'.$this->request['controller'];

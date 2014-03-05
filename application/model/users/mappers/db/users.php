@@ -2,15 +2,7 @@
 
 class model_users_mappers_db_users extends model_mappers_db
 {
-	public $link;
-	public $config;
-	
-	public function __construct($config)
-	{
-		$this->config = $config;
-		$this->link = parent::__construct($config);		
-	}
-	
+
 	public function getUsers()
 	{
 		$sql="SELECT users.iduser,
@@ -21,12 +13,8 @@ class model_users_mappers_db_users extends model_mappers_db
 			  FROM users, genders, cities
 			  WHERE users.genders_idgender = genders.idgender AND
 					users.cities_idcity = cities.idcity";
-			
-		echo "<pre>ses:";
-		print_r($_SESSION);
-		echo "</pre>";
 		
-		$result=mysqli_query($_SESSION['register']['linkR'], $sql);
+		$result=mysqli_query($this->linkR, $sql);
 		while ($row=mysqli_fetch_assoc($result))
 		{
 			$row['pets']=$this->getPets($row['iduser']);
@@ -47,7 +35,7 @@ class model_users_mappers_db_users extends model_mappers_db
 					users.cities_idcity = cities.idcity AND
 					users.iduser = ".$iduser;
 	
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkR, $sql);
 		while ($row=mysqli_fetch_assoc($result))
 		{
 			$row['pets']=explode('|',$this->getPets($row['iduser']));
@@ -66,7 +54,7 @@ class model_users_mappers_db_users extends model_mappers_db
 			  WHERE users.email = '".$email."' AND
 			  		users.password = '".$password."'";
 	
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkR, $sql);
 		while ($row=mysqli_fetch_assoc($result))
 		{
 			$row['pets']=explode('|',$this->getPets($row['iduser']));
@@ -84,8 +72,8 @@ class model_users_mappers_db_users extends model_mappers_db
 			INNER JOIN users_has_pets ON
 				  users_has_pets.pets_idpet = pets.idpet
 			WHERE users_has_pets.users_iduser = ".$iduser;
-	
-		$result=mysqli_query($this->link, $sql);
+		
+		$result=mysqli_query($this->linkR, $sql);
 		$row = mysqli_fetch_assoc($result);
 		return $row['pets'];
 	}
@@ -98,7 +86,7 @@ class model_users_mappers_db_users extends model_mappers_db
 				  users_has_languages.languages_idlanguage = languages.idlanguage
 			WHERE users_has_languages.users_iduser = ".$iduser;
 	
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkR, $sql);
 		$row = mysqli_fetch_assoc($result);
 		return $row['languages'];
 	}
@@ -110,7 +98,7 @@ class model_users_mappers_db_users extends model_mappers_db
 		$this->deleteUserLanguages($iduser);
 		$sql = "DELETE FROM users WHERE iduser = ".$iduser;
 	
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkW, $sql);
 		return $result;
 	}
 	
@@ -119,7 +107,7 @@ class model_users_mappers_db_users extends model_mappers_db
 		$sql = "DELETE FROM users_has_pets
 			WHERE users_iduser = ".$iduser;
 		
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkW, $sql);
 		return $result;
 	}
 	
@@ -128,7 +116,7 @@ class model_users_mappers_db_users extends model_mappers_db
 		$sql = "DELETE FROM users_has_languages
 			WHERE users_iduser = ".$iduser;
 		
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkW, $sql);
 		return $result;
 	}
 	
@@ -143,7 +131,7 @@ class model_users_mappers_db_users extends model_mappers_db
 		die;
 	
 		
-		$result=mysqli_query($this->link, $sql);
+		$result=mysqli_query($this->linkW, $sql);
 		return $result;
 	}
 }

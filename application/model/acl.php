@@ -10,13 +10,13 @@ class model_acl extends model_mappers_db
 			  WHERE acl.users_iduser = '".$id."' AND
 			  		acl.controller = '".$request['controller']."' AND
 			  		acl.action = '".$request['action']."'";
-		
-	
-		$result=mysqli_query($this->link, $sql);
+
+		$result=mysqli_query($this->linkR, $sql);
 		while ($row=mysqli_fetch_assoc($result))
 		{
 			$rows[]=$row;
 		}
+		
 		if(isset($rows))
 			return $rows[0];
 		else

@@ -4,6 +4,7 @@ class controllers_users extends frontview
 {
 	public function select()
 	{
+
 		$obj = new model_users($this->config);
 		$filas = $obj->getUsers();
 		$content = model_general_views::renderView(array('filas'=>$filas), $this->request);
